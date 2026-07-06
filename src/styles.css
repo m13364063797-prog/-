@@ -1420,10 +1420,11 @@ a {
 
   .sectionHeader h2 {
     max-width: 100%;
-    font-size: clamp(34px, 10.8vw, 48px);
-    line-height: 1.12;
-    padding: 0.1em 0 0.12em;
-    word-break: keep-all;
+    font-size: clamp(28px, 8.8vw, 40px);
+    line-height: 1.22;
+    padding: 0.16em 0 0.2em;
+    word-break: normal;
+    overflow-wrap: anywhere;
   }
 
   .profile::before {
@@ -1441,9 +1442,20 @@ a {
     gap: 14px;
   }
 
+  .profileGrid {
+    grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .timeline {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
   .portraitPanel {
     min-height: auto;
-    padding: 14px;
+    padding: 10px;
   }
 
   .portrait {
@@ -1456,32 +1468,47 @@ a {
   }
 
   .contactLines {
-    margin-top: 14px;
-    gap: 9px;
-    font-size: 13px;
+    margin-top: 10px;
+    gap: 7px;
+    font-size: 10px;
+    line-height: 1.35;
+  }
+
+  .contactLines a,
+  .contactLines span {
+    gap: 6px;
+    min-height: 18px;
+    overflow-wrap: anywhere;
+  }
+
+  .contactIcon {
+    width: 13px;
+    height: 13px;
+    flex-basis: 13px;
   }
 
   .bioPanel {
-    padding: 22px;
+    padding: 14px;
   }
 
   .bioPanel p {
-    font-size: 15px;
-    line-height: 1.82;
+    font-size: 12px;
+    line-height: 1.7;
   }
 
   .stats {
-    margin-top: 26px;
-    gap: 14px;
+    margin-top: 18px;
+    gap: 10px;
     border-top: 1px solid var(--line);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .stats div {
-    padding: 18px 0 0;
+    padding: 14px 0 0;
   }
 
   .stats strong {
-    font-size: 32px;
+    font-size: 27px;
     line-height: 1.16;
   }
 
@@ -1493,21 +1520,21 @@ a {
 
   .timeline article,
   .strengthGrid article {
-    padding: 20px;
+    padding: 16px;
   }
 
   .timeline h3,
   .projectContent h3,
   .strengthGrid h3 {
     margin: 12px 0 9px;
-    font-size: 21px;
+    font-size: 18px;
     line-height: 1.3;
   }
 
   .timeline p,
   .projectContent p,
   .strengthGrid p {
-    font-size: 14px;
+    font-size: 12px;
     line-height: 1.72;
   }
 
@@ -1543,53 +1570,53 @@ a {
   }
 
   .projectOverlay {
-    padding: 12px;
-    align-items: end;
+    padding: 42px 16px;
+    align-items: center;
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
   }
 
   .projectExpanded {
-    width: 100%;
-    max-height: calc(100svh - 24px);
-    padding: 18px;
-    border-radius: 26px;
-    overflow: hidden;
+    width: min(390px, calc(100vw - 56px));
+    max-height: calc(100svh - 128px);
+    padding: 14px;
+    border-radius: 24px;
+    overflow: visible;
   }
 
   .expandedHeader {
     gap: 12px;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
   }
 
   .expandedHeader h2 {
     margin-top: 8px;
-    font-size: clamp(28px, 8vw, 38px);
+    font-size: clamp(22px, 6.7vw, 30px);
     line-height: 1.16;
   }
 
   .expandedHeader p {
-    max-height: 4.9em;
+    max-height: 3.4em;
     overflow: hidden;
-    font-size: 13px;
+    font-size: 12px;
     line-height: 1.65;
   }
 
   .workRailWrap {
-    padding: 8px 0 18px;
+    padding: 6px 0 18px;
   }
 
   .workRail {
     grid-template-rows: repeat(2, minmax(0, 1fr));
-    grid-auto-columns: minmax(250px, 78vw);
-    gap: 12px;
-    height: min(78vh, 520px);
-    padding: 12px 2px 14px;
+    grid-auto-columns: minmax(148px, 48vw);
+    gap: 10px;
+    height: min(42svh, 350px);
+    padding: 10px 2px 14px;
     touch-action: pan-x;
   }
 
   .workThumb {
-    border-radius: 18px;
+    border-radius: 15px;
   }
 
   .workThumb:hover {
@@ -1666,10 +1693,10 @@ a {
 
   .sectionHeader h2,
   .contact h2 {
-    font-size: clamp(31px, 10vw, 42px);
+    font-size: clamp(26px, 8.4vw, 34px);
   }
 
   .workRail {
-    grid-auto-columns: minmax(230px, 82vw);
+    grid-auto-columns: minmax(138px, 52vw);
   }
 }

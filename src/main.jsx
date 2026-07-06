@@ -266,6 +266,17 @@ function ContactIcon({ type }) {
 function WorkMedia({ work, alt, preview = false }) {
   const videoRef = useRef(null)
 
+  function preparePreviewFrame() {
+    if (!preview || !videoRef.current) return
+    try {
+      if (videoRef.current.currentTime < 0.05) {
+        videoRef.current.currentTime = 0.05
+      }
+    } catch {
+      // Some mobile browsers only allow seeking after enough metadata is ready.
+    }
+  }
+
   function playPreview() {
     if (!preview || !videoRef.current) return
     videoRef.current.play().catch(() => {})
@@ -287,8 +298,9 @@ function WorkMedia({ work, alt, preview = false }) {
         loop={preview}
         playsInline
         controls={false}
-        preload={preview ? 'none' : 'metadata'}
+        preload="metadata"
         aria-label={alt}
+        onLoadedMetadata={preparePreviewFrame}
         onPointerEnter={playPreview}
         onPointerLeave={pausePreview}
       />
@@ -296,7 +308,7 @@ function WorkMedia({ work, alt, preview = false }) {
   }
 
   if (work.src) {
-    return <img src={work.src} alt={alt} loading="lazy" decoding="async" />
+    return <img src={work.src} alt={alt} loading={preview ? 'eager' : 'lazy'} decoding="async" />
   }
 
   return <i />
@@ -328,7 +340,7 @@ function ProjectCard({ project, index, onOpen }) {
       onMouseLeave={handleLeave}
       style={{ '--tilt-x': '0deg', '--tilt-y': '0deg', '--glow-x': '50%', '--glow-y': '50%' }}
     >
-      <img src={project.image} alt={project.title} loading="lazy" decoding="async" />
+      <img src={project.image} alt={project.title} loading="eager" decoding="async" />
       <div className="projectContent">
         <b>{String(index + 1).padStart(2, '0')}</b>
         <span>{project.tag}</span>
@@ -387,6 +399,8 @@ function ProjectOverlay({ project, projectIndex, activeWork, setActiveWork, onCl
     velocity: 0,
     moved: false,
     totalDistance: 0,
+    pointerType: 'mouse',
+    suppressClickUntil: 0,
   })
   const [scrollMetrics, setScrollMetrics] = useState({ position: 0, size: 1 })
   const [progressVisible, setProgressVisible] = useState(false)
@@ -556,6 +570,8 @@ function ProjectOverlay({ project, projectIndex, activeWork, setActiveWork, onCl
       velocity: 0,
       moved: false,
       totalDistance: 0,
+      pointerType: event.pointerType,
+      suppressClickUntil: dragStateRef.current.suppressClickUntil,
     }
     node.classList.add('isDragging')
     node.setPointerCapture?.(event.pointerId)
@@ -570,7 +586,7 @@ function ProjectOverlay({ project, projectIndex, activeWork, setActiveWork, onCl
     const deltaX = event.clientX - state.lastX
     const deltaTime = Math.max(now - state.lastTime, 16)
     state.totalDistance += Math.abs(deltaX)
-    if (state.totalDistance > 14) state.moved = true
+    if (state.totalDistance > 6) state.moved = true
 
     node.scrollLeft -= deltaX
     state.velocity = deltaX / deltaTime * 16.67
@@ -587,10 +603,12 @@ function ProjectOverlay({ project, projectIndex, activeWork, setActiveWork, onCl
     node.classList.remove('isDragging')
     node.releasePointerCapture?.(event.pointerId)
     if (state.moved) {
+      event.preventDefault()
+      dragStateRef.current.suppressClickUntil = performance.now() + 420
       startInertia()
       window.setTimeout(() => {
         dragStateRef.current.moved = false
-      }, 120)
+      }, 220)
       return
     }
 
@@ -601,6 +619,7 @@ function ProjectOverlay({ project, projectIndex, activeWork, setActiveWork, onCl
   }
 
   function handleWorkClick(index) {
+    if (performance.now() < dragStateRef.current.suppressClickUntil) return
     if (dragStateRef.current.moved) return
     setActiveWork(index)
   }
