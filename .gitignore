@@ -1,0 +1,14 @@
+node_modules/
+dist/
+backups/
+.agents/
+.codex/
+
+*.log
+.env
+.env.*
+
+# Local source/export folders that are not required by the deployed site
+MOV/
+img/
+
