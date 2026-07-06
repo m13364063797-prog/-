@@ -285,7 +285,7 @@ function WorkMedia({ work, alt, preview = false }) {
   function pausePreview() {
     if (!preview || !videoRef.current) return
     videoRef.current.pause()
-    videoRef.current.currentTime = 0
+    videoRef.current.currentTime = 0.05
   }
 
   if (work.type === 'video') {
@@ -394,7 +394,10 @@ function ProjectOverlay({ project, projectIndex, activeWork, setActiveWork, onCl
   })
   const dragStateRef = useRef({
     active: false,
+    startX: 0,
+    startY: 0,
     lastX: 0,
+    lastY: 0,
     lastTime: 0,
     velocity: 0,
     moved: false,
@@ -565,7 +568,10 @@ function ProjectOverlay({ project, projectIndex, activeWork, setActiveWork, onCl
     stopInertia()
     dragStateRef.current = {
       active: true,
+      startX: event.clientX,
+      startY: event.clientY,
       lastX: event.clientX,
+      lastY: event.clientY,
       lastTime: performance.now(),
       velocity: 0,
       moved: false,
@@ -584,13 +590,17 @@ function ProjectOverlay({ project, projectIndex, activeWork, setActiveWork, onCl
 
     const now = performance.now()
     const deltaX = event.clientX - state.lastX
+    const deltaY = event.clientY - state.lastY
     const deltaTime = Math.max(now - state.lastTime, 16)
-    state.totalDistance += Math.abs(deltaX)
-    if (state.totalDistance > 6) state.moved = true
+    const totalMove = Math.hypot(event.clientX - state.startX, event.clientY - state.startY)
+    state.totalDistance += Math.abs(deltaX) + Math.abs(deltaY)
+    if (totalMove > 4 || state.totalDistance > 8) state.moved = true
+    if (state.moved && state.pointerType === 'touch') event.preventDefault()
 
     node.scrollLeft -= deltaX
     state.velocity = deltaX / deltaTime * 16.67
     state.lastX = event.clientX
+    state.lastY = event.clientY
     state.lastTime = now
     updateRailProgress(node)
   }
@@ -602,9 +612,10 @@ function ProjectOverlay({ project, projectIndex, activeWork, setActiveWork, onCl
     state.active = false
     node.classList.remove('isDragging')
     node.releasePointerCapture?.(event.pointerId)
-    if (state.moved) {
+    const movedDistance = Math.hypot(event.clientX - state.startX, event.clientY - state.startY)
+    if (state.moved || movedDistance > 4) {
       event.preventDefault()
-      dragStateRef.current.suppressClickUntil = performance.now() + 420
+      dragStateRef.current.suppressClickUntil = performance.now() + 720
       startInertia()
       window.setTimeout(() => {
         dragStateRef.current.moved = false
@@ -612,15 +623,35 @@ function ProjectOverlay({ project, projectIndex, activeWork, setActiveWork, onCl
       return
     }
 
+    if (state.pointerType === 'touch') return
+
     const thumb = document.elementFromPoint(event.clientX, event.clientY)?.closest?.('.workThumb')
     if (thumb?.dataset.workIndex) {
       setActiveWork(Number(thumb.dataset.workIndex))
     }
   }
 
-  function handleWorkClick(index) {
-    if (performance.now() < dragStateRef.current.suppressClickUntil) return
-    if (dragStateRef.current.moved) return
+  function handleWorkClick(event, index, work) {
+    if (performance.now() < dragStateRef.current.suppressClickUntil) {
+      event.preventDefault()
+      return
+    }
+    if (dragStateRef.current.moved) {
+      event.preventDefault()
+      return
+    }
+    if (work.type === 'video') {
+      event.preventDefault()
+      const video = event.currentTarget.querySelector('video')
+      if (!video) return
+      if (video.paused) {
+        video.play().catch(() => {})
+      } else {
+        video.pause()
+        video.currentTime = 0.05
+      }
+      return
+    }
     setActiveWork(index)
   }
 
@@ -658,10 +689,11 @@ function ProjectOverlay({ project, projectIndex, activeWork, setActiveWork, onCl
             >
               {works.map((work, index) => (
               <button
-                className={`workThumb ${work.src ? '' : 'isPlaceholder'}`}
+                className={`workThumb ${work.src ? '' : 'isPlaceholder'} ${work.type === 'video' ? 'isVideo' : ''}`}
                 key={work.id}
                 data-work-index={index}
-                onClick={() => handleWorkClick(index)}
+                onClick={(event) => handleWorkClick(event, index, work)}
+                onDragStart={(event) => event.preventDefault()}
               >
                 <WorkMedia work={work} alt={`${project.title} 作品 ${index + 1}`} preview />
               </button>
@@ -998,6 +1030,11 @@ function App() {
           <span>{copy.heroMeta[1]}</span>
           <span>{copy.heroMeta[2]}</span>
         </div>
+        <a className="scrollCue" href="#profile" aria-label="向下滑动查看个人经历">
+          <span>SCROLL</span>
+          <i />
+          <b>向下滑</b>
+        </a>
       </section>
 
       <section className="profile section" id="profile">

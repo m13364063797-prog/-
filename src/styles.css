@@ -438,6 +438,62 @@ a {
   border-bottom: 1px solid var(--line);
 }
 
+.scrollCue {
+  position: absolute;
+  left: 50%;
+  bottom: 26px;
+  z-index: 5;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 8px 14px;
+  border: 1px solid rgba(238, 241, 244, 0.18);
+  border-radius: 999px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.03)),
+    rgba(8, 9, 10, 0.48);
+  color: rgba(223, 228, 232, 0.78);
+  font-size: 10px;
+  font-family: "Arial Black", Impact, "Microsoft YaHei", sans-serif;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  transform: translateX(-50%);
+  backdrop-filter: blur(24px) saturate(1.3);
+  -webkit-backdrop-filter: blur(24px) saturate(1.3);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 14px 44px rgba(0, 0, 0, 0.34),
+    0 0 26px rgba(255, 59, 63, 0.1);
+}
+
+.scrollCue i {
+  position: relative;
+  width: 18px;
+  height: 28px;
+  border: 1px solid rgba(238, 241, 244, 0.42);
+  border-radius: 999px;
+}
+
+.scrollCue i::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 6px;
+  width: 3px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--accent);
+  box-shadow: 0 0 12px rgba(255, 59, 63, 0.7);
+  transform: translateX(-50%);
+  animation: cueDot 1.65s cubic-bezier(.3, .7, .2, 1) infinite;
+}
+
+.scrollCue b {
+  color: var(--text);
+  font-weight: 900;
+}
+
 .sectionHeader {
   width: var(--max);
   margin: 0 auto 56px;
@@ -915,6 +971,60 @@ a {
   pointer-events: none;
 }
 
+.workThumb.isVideo::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 2;
+  width: 46px;
+  height: 46px;
+  border: 1px solid rgba(238, 241, 244, 0.24);
+  border-radius: 999px;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='46' height='46' viewBox='0 0 46 46'%3E%3Cpath d='M20 16v14l11-7z' fill='%23f3f5f7'/%3E%3C/svg%3E") center / 46px 46px no-repeat,
+    linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.03)),
+    rgba(8, 9, 10, 0.58);
+  box-shadow: 0 18px 46px rgba(0, 0, 0, 0.36), 0 0 28px rgba(255, 59, 63, 0.1);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.workThumb.isVideo i::after,
+.workThumb.isVideo::after {
+  pointer-events: none;
+}
+
+.workThumb.isVideo span::before {
+  content: "";
+}
+
+.workThumb.isVideo::marker {
+  display: none;
+}
+
+.workThumb.isVideo > video + span {
+  display: none;
+}
+
+.workThumb.isVideo > video {
+  background: #050607;
+}
+
+.workThumb.isVideo::selection {
+  background: transparent;
+}
+
+.workThumb.isVideo::before {
+  clip-path: none;
+}
+
+.workThumb.isVideo::after {
+  z-index: 1;
+}
+
 .workThumb span {
   display: none;
 }
@@ -1174,6 +1284,26 @@ a {
   }
 }
 
+@keyframes cueDot {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -2px);
+  }
+
+  28% {
+    opacity: 1;
+  }
+
+  72% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(-50%, 10px);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -1412,6 +1542,21 @@ a {
     border-radius: 999px;
   }
 
+  .scrollCue {
+    bottom: 14px;
+    min-height: 38px;
+    padding: 7px 11px;
+    gap: 8px;
+    font-size: 9px;
+    backdrop-filter: blur(18px) saturate(1.24);
+    -webkit-backdrop-filter: blur(18px) saturate(1.24);
+  }
+
+  .scrollCue i {
+    width: 15px;
+    height: 24px;
+  }
+
   .sectionHeader {
     width: 100%;
     margin: 0 auto 26px;
@@ -1456,10 +1601,35 @@ a {
   .portraitPanel {
     min-height: auto;
     padding: 10px;
+    position: relative;
+    justify-content: flex-start;
+    gap: 10px;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 84% 42%, rgba(255, 59, 63, 0.16), transparent 34%),
+      linear-gradient(160deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.018)),
+      rgba(23, 25, 28, 0.82);
+  }
+
+  .portraitPanel::before {
+    content: "YK";
+    position: absolute;
+    right: 10px;
+    bottom: 72px;
+    color: rgba(223, 228, 232, 0.08);
+    font-family: "Arial Black", Impact, "Microsoft YaHei", sans-serif;
+    font-size: 52px;
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .portraitPanel > * {
+    position: relative;
+    z-index: 1;
   }
 
   .portrait {
-    aspect-ratio: 1 / 1;
+    aspect-ratio: 1 / 1.06;
     flex: none;
   }
 
@@ -1469,9 +1639,15 @@ a {
 
   .contactLines {
     margin-top: 10px;
+    padding: 9px;
     gap: 7px;
     font-size: 10px;
     line-height: 1.35;
+    border: 1px solid rgba(238, 241, 244, 0.1);
+    border-radius: 14px;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.052), rgba(255, 255, 255, 0.018)),
+      rgba(8, 9, 10, 0.2);
   }
 
   .contactLines a,
