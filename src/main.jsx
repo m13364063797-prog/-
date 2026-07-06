@@ -150,7 +150,7 @@ const timeline = [
 const uiCopy = {
   zh: {
     nav: ['经历', '项目', '优势', '联系'],
-    contact: '联系我',
+    contact: '获取简历',
     backHome: '返回首页',
     topLeft: 'VISUAL PROTOCOL / 2026',
     topRight: 'CGI · AIGC · SPATIAL',
@@ -170,7 +170,7 @@ const uiCopy = {
   },
   en: {
     nav: ['Profile', 'Works', 'Strengths', 'Contact'],
-    contact: 'Contact',
+    contact: 'Resume',
     backHome: 'Back to home',
     topLeft: 'VISUAL PROTOCOL / 2026',
     topRight: 'CGI · AIGC · SPATIAL',
@@ -943,7 +943,7 @@ function App() {
             <i />
             <span className={lang === 'en' ? 'isActive' : ''}>EN</span>
           </button>
-          <a className="navContact" href="mailto:782550606@qq.com">{copy.contact}</a>
+          <a className="navContact" href="/resume-youkai.pdf" target="_blank" rel="noreferrer">{copy.contact}</a>
         </div>
       </header>
 
