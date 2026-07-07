@@ -3,12 +3,14 @@ dist/
 backups/
 .agents/
 .codex/
+tmp/
 
 *.log
 .env
 .env.*
+output/pdf/*preview*.png
+output/pdf/*with-website.pdf
 
 # Local source/export folders that are not required by the deployed site
 MOV/
 img/
-

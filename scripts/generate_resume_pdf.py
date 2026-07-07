@@ -323,11 +323,23 @@ def page_two(c):
 
     y -= 88
     y = draw_section_title(c, ("求职意向", "INTENTION"), x, y, PAGE_W - MARGIN * 2)
-    draw_round_rect(c, x, y - 74, PAGE_W - MARGIN * 2, 74, radius=12, fill=PANEL, stroke=LINE)
+    draw_round_rect(c, x, y - 58, PAGE_W - MARGIN * 2, 58, radius=12, fill=PANEL, stroke=LINE)
     intent_left = "意向岗位：AIGC影视\n意向城市：重庆\n期望薪资：8-10K / 面议"
-    intent_right = "期望行业：AI影视业\n当前状态：考虑机会\n个人网站：网页版作品集"
+    intent_right = "期望行业：AI影视业\n当前状态：考虑机会"
     draw_text(c, intent_left, x + 14, y - 18, 220, size=8.7, leading=15, color=TEXT)
     draw_text(c, intent_right, x + 292, y - 18, 230, size=8.7, leading=15, color=TEXT)
+
+    website_y = y - 78
+    draw_round_rect(c, x, website_y - 34, PAGE_W - MARGIN * 2, 34, radius=14, fill=(0.095, 0.058, 0.062), stroke=(0.42, 0.12, 0.13), line_width=0.75)
+    set_fill(c, ACCENT)
+    c.setFont("YaHeiBold", 8)
+    c.drawString(x + 15, website_y - 14, "PERSONAL WEBSITE")
+    set_fill(c, TEXT)
+    c.setFont("YaHeiBold", 12)
+    c.drawString(x + 154, website_y - 16, "https://aikk.pages.dev/")
+    set_fill(c, SOFT)
+    c.setFont("YaHei", 7.2)
+    c.drawRightString(PAGE_W - MARGIN - 15, website_y - 16, "WEB PORTFOLIO")
 
     final_y = 58 * mm
     draw_round_rect(c, x, final_y - 44, PAGE_W - MARGIN * 2, 44, radius=14, fill=(0.095, 0.058, 0.062), stroke=(0.42, 0.12, 0.13), line_width=0.65)
