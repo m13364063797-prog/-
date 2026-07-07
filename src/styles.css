@@ -911,7 +911,7 @@ a {
   cursor: pointer;
   user-select: none;
   -webkit-user-drag: none;
-  background: #fff;
+  background: #101316;
   padding: 0;
   color: var(--text);
   transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;

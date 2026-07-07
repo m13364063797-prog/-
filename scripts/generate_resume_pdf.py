@@ -319,7 +319,7 @@ def page_two(c):
     y = min(left_y, right_y) - 12
     y = draw_section_title(c, ("教育与荣誉", "EDUCATION"), x, y, PAGE_W - MARGIN * 2)
     draw_round_rect(c, x, y - 62, PAGE_W - MARGIN * 2, 62, radius=12, fill=PANEL, stroke=LINE)
-    draw_text(c, "四川美术学院 | 本科 | 艺术与科技专业（特殊原因结业）\n就读时间：2017.09 - 2021.06\n作品《草履虫梦境》入选四川美术学院年展", x + 14, y - 18, PAGE_W - MARGIN * 2 - 28, size=8.7, leading=14, color=TEXT)
+    draw_text(c, "四川美术学院 | 本科 | 艺术与科技专业\n就读时间：2017.09 - 2021.06\n作品《草履虫梦境》入选四川美术学院年展", x + 14, y - 18, PAGE_W - MARGIN * 2 - 28, size=8.7, leading=14, color=TEXT)
 
     y -= 88
     y = draw_section_title(c, ("求职意向", "INTENTION"), x, y, PAGE_W - MARGIN * 2)

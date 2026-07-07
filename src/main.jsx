@@ -68,6 +68,7 @@ const productCgiWorks = [
 ].map((file, index) => ({
   id: `product-cgi-${index + 1}`,
   src: assetPath(`works/product-cgi/${encodeURIComponent(file)}`),
+  poster: assetPath(`works/product-cgi/posters/${file.replace(/\.[^.]+$/, '.jpg')}`),
   type: 'video',
 }))
 
@@ -81,6 +82,7 @@ const stageVisualWorks = [
 ].map((file, index) => ({
   id: `stage-visual-${index + 1}`,
   src: assetPath(`works/stage-visual/${file}`),
+  poster: assetPath(`works/stage-visual/posters/${file.replace(/\.[^.]+$/, '.jpg')}`),
   type: 'video',
 }))
 
@@ -94,6 +96,7 @@ const aiShortsWorks = [
 ].map((file, index) => ({
   id: `ai-shorts-${index + 1}`,
   src: assetPath(`works/ai-shorts/${file}`),
+  poster: assetPath(`works/ai-shorts/posters/${file.replace(/\.[^.]+$/, '.jpg')}`),
   type: 'video',
 }))
 
@@ -265,7 +268,7 @@ function ContactIcon({ type }) {
   )
 }
 
-function WorkMedia({ work, alt, preview = false }) {
+function WorkMedia({ work, alt, preview = false, priority = false }) {
   const videoRef = useRef(null)
 
   function preparePreviewFrame() {
@@ -290,10 +293,15 @@ function WorkMedia({ work, alt, preview = false }) {
   }
 
   if (work.type === 'video') {
+    if (preview && work.poster) {
+      return <img src={work.poster} alt={alt} loading={priority ? 'eager' : 'lazy'} decoding="async" />
+    }
+
     return (
       <video
         ref={videoRef}
         src={work.src}
+        poster={work.poster}
         muted
         autoPlay={!preview}
         loop={preview}
@@ -309,7 +317,7 @@ function WorkMedia({ work, alt, preview = false }) {
   }
 
   if (work.src) {
-    return <img src={work.src} alt={alt} loading={preview ? 'eager' : 'lazy'} decoding="async" />
+    return <img src={work.src} alt={alt} loading={priority ? 'eager' : 'lazy'} decoding="async" />
   }
 
   return <i />
@@ -689,7 +697,7 @@ function ProjectOverlay({ project, projectIndex, activeWork, setActiveWork, onCl
                 onClick={(event) => handleWorkClick(event, index, work)}
                 onDragStart={(event) => event.preventDefault()}
               >
-                <WorkMedia work={work} alt={`${project.title} 作品 ${index + 1}`} preview />
+                <WorkMedia work={work} alt={`${project.title} 作品 ${index + 1}`} preview priority={index < 8} />
               </button>
             ))}
           </div>
