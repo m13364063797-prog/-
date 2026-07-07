@@ -6,6 +6,8 @@ import './styles.css'
 
 gsap.registerPlugin(ScrollTrigger)
 
+const assetPath = (path) => `${import.meta.env.BASE_URL}${path.replace(/^\/+/, '')}`
+
 const commercialSpaceWorks = [
   'page_002_image_01.jpg',
   'page_003_image_01.jpg',
@@ -50,7 +52,7 @@ const commercialSpaceWorks = [
   'page_058_image_01.jpg',
 ].map((file, index) => ({
   id: `commercial-space-${index + 1}`,
-  src: `/works/commercial-space/${file}`,
+  src: assetPath(`works/commercial-space/${file}`),
 }))
 
 const productCgiWorks = [
@@ -65,7 +67,7 @@ const productCgiWorks = [
   '8.mp4',
 ].map((file, index) => ({
   id: `product-cgi-${index + 1}`,
-  src: `/works/product-cgi/${encodeURIComponent(file)}`,
+  src: assetPath(`works/product-cgi/${encodeURIComponent(file)}`),
   type: 'video',
 }))
 
@@ -78,7 +80,7 @@ const stageVisualWorks = [
   '21.mp4',
 ].map((file, index) => ({
   id: `stage-visual-${index + 1}`,
-  src: `/works/stage-visual/${file}`,
+  src: assetPath(`works/stage-visual/${file}`),
   type: 'video',
 }))
 
@@ -91,7 +93,7 @@ const aiShortsWorks = [
   '666.mp4',
 ].map((file, index) => ({
   id: `ai-shorts-${index + 1}`,
-  src: `/works/ai-shorts/${file}`,
+  src: assetPath(`works/ai-shorts/${file}`),
   type: 'video',
 }))
 
@@ -99,7 +101,7 @@ const projects = [
   {
     title: 'AI 漫画短剧自媒体',
     tag: 'AIGC / Short Drama Workflow',
-    image: '/images/project-ai.jpg',
+    image: assetPath('images/project-ai.jpg'),
     works: aiShortsWorks,
     meta: 'KK 漫画阁，2800+ 粉丝，1.9 万获赞',
     desc: '独立完成选题策划、小说改编、角色设定、AI 批量生图生视频、动态漫剪辑、字幕配音与发布运营。',
@@ -107,7 +109,7 @@ const projects = [
   {
     title: '产品 CGI 宣传短片',
     tag: 'Automotive / Industrial CGI',
-    image: '/images/project-cgi.jpg',
+    image: assetPath('images/project-cgi.jpg'),
     works: productCgiWorks,
     meta: '五菱动力电池、宝骏云海、MINIEV 等车型商业宣传',
     desc: '负责高精度三维资产、机械结构动画、写实工业光影渲染与成片输出，让产品信息以更具发布会质感的影像方式抵达用户。',
@@ -115,7 +117,7 @@ const projects = [
   {
     title: '商业美陈与沉浸空间',
     tag: 'Spatial Design / Retail Installation',
-    image: '/images/project-space.jpg',
+    image: assetPath('images/project-space.jpg'),
     works: commercialSpaceWorks,
     galleryMode: 'horizontal',
     meta: '源著天街、上海奇迹花园、招商花海博物志等',
@@ -124,7 +126,7 @@ const projects = [
   {
     title: '舞美大屏 CG 视觉',
     tag: 'Stage Visual / Motion Design',
-    image: '/images/project-stage.jpg',
+    image: assetPath('images/project-stage.jpg'),
     works: stageVisualWorks,
     meta: '《白鹭》《傩面》《千江月》舞台视觉',
     desc: '围绕舞台分辨率、循环播放和现场氛围制作国风三维场景、粒子流体动态与长镜头视觉素材。',
@@ -375,7 +377,7 @@ function HeroBackgroundVideo() {
 
   return (
     <video ref={videoRef} className="heroVideo" autoPlay muted loop playsInline preload="none" aria-hidden="true">
-      {canLoadVideo && <source src="/videos/hero-bg.webm" type="video/webm" />}
+      {canLoadVideo && <source src={assetPath('videos/hero-bg.webm')} type="video/webm" />}
     </video>
   )
 }
@@ -982,7 +984,7 @@ function App() {
             <i />
             <span className={lang === 'en' ? 'isActive' : ''}>EN</span>
           </button>
-          <a className="navContact" href="/resume-youkai.pdf" target="_blank" rel="noreferrer">{copy.contact}</a>
+          <a className="navContact" href={assetPath('resume-youkai.pdf')} target="_blank" rel="noreferrer">{copy.contact}</a>
         </div>
       </header>
 
@@ -1033,7 +1035,7 @@ function App() {
         <div className="profileGrid">
           <div className="portraitPanel">
             <div className="portrait">
-              <img src="/images/profile-portrait.jpg" alt="游凯个人肖像" />
+              <img src={assetPath('images/profile-portrait.jpg')} alt="游凯个人肖像" />
             </div>
             <div className="contactLines">
               <a href="tel:18717027073"><ContactIcon type="phone" />187 1702 7073</a>
