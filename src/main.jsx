@@ -640,18 +640,6 @@ function ProjectOverlay({ project, projectIndex, activeWork, setActiveWork, onCl
       event.preventDefault()
       return
     }
-    if (work.type === 'video') {
-      event.preventDefault()
-      const video = event.currentTarget.querySelector('video')
-      if (!video) return
-      if (video.paused) {
-        video.play().catch(() => {})
-      } else {
-        video.pause()
-        video.currentTime = 0.05
-      }
-      return
-    }
     setActiveWork(index)
   }
 
