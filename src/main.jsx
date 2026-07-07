@@ -143,10 +143,10 @@ const strengths = [
 ]
 
 const timeline = [
+  ['自由创作', 'AI 漫短剧 / 三维视觉外包', '自主运营 KK 漫画阁，并承接沉浸式剧场、商业空间视觉项目。'],
   ['2025 - 2026', '北门影视传媒', '三维 CG 动画设计师，参与产品官宣 CG、影视片头、线下舞美视觉动画等项目。'],
   ['2023 - 2024', '感映维度艺术发展中心', '负责商业 IP、潮玩产品、商业美陈项目的三维设计方案与落地文件。'],
   ['2021 - 2022', '空间跳动文化传媒', '参与江北机场 T3 航站楼公共空间视觉、装置与主题登机口设计。'],
-  ['自由创作', 'AI 漫短剧 / 三维视觉外包', '自主运营 KK 漫画阁，并承接沉浸式剧场、商业空间视觉项目。'],
 ]
 
 const uiCopy = {
@@ -225,10 +225,10 @@ const strengthsEn = [
 ]
 
 const timelineEn = [
+  ['Independent Practice', 'AI Comic Shorts / 3D Visual Freelance', 'Runs KK Comic Studio and takes on immersive theater and commercial spatial visual projects.'],
   ['2025 - 2026', 'Beimen Film & Media', '3D CG motion designer involved in product CGI launches, film titles and offline stage visual animation.'],
   ['2023 - 2024', 'Ganying Dimension Art Center', 'Responsible for 3D design proposals and delivery documents for commercial IP, art toys and display projects.'],
   ['2021 - 2022', 'Space Jump Culture Media', 'Worked on public-space visuals, installations and themed boarding gate design for Jiangbei Airport T3.'],
-  ['Independent Practice', 'AI Comic Shorts / 3D Visual Freelance', 'Runs KK Comic Studio and takes on immersive theater and commercial spatial visual projects.'],
 ]
 
 function getWorks(project) {
@@ -595,8 +595,10 @@ function ProjectOverlay({ project, projectIndex, activeWork, setActiveWork, onCl
     const deltaY = event.clientY - state.lastY
     const deltaTime = Math.max(now - state.lastTime, 16)
     const totalMove = Math.hypot(event.clientX - state.startX, event.clientY - state.startY)
+    const moveThreshold = state.pointerType === 'touch' ? 12 : 4
+    const distanceThreshold = state.pointerType === 'touch' ? 18 : 8
     state.totalDistance += Math.abs(deltaX) + Math.abs(deltaY)
-    if (totalMove > 4 || state.totalDistance > 8) state.moved = true
+    if (totalMove > moveThreshold || state.totalDistance > distanceThreshold) state.moved = true
     if (state.moved && state.pointerType === 'touch') event.preventDefault()
 
     node.scrollLeft -= deltaX
@@ -615,7 +617,8 @@ function ProjectOverlay({ project, projectIndex, activeWork, setActiveWork, onCl
     node.classList.remove('isDragging')
     node.releasePointerCapture?.(event.pointerId)
     const movedDistance = Math.hypot(event.clientX - state.startX, event.clientY - state.startY)
-    if (state.moved || movedDistance > 4) {
+    const tapThreshold = state.pointerType === 'touch' ? 12 : 4
+    if (state.moved || movedDistance > tapThreshold) {
       event.preventDefault()
       dragStateRef.current.suppressClickUntil = performance.now() + 720
       startInertia()
@@ -625,10 +628,12 @@ function ProjectOverlay({ project, projectIndex, activeWork, setActiveWork, onCl
       return
     }
 
-    if (state.pointerType === 'touch') return
+    if (event.type === 'pointercancel' || event.type === 'pointerleave') return
 
     const thumb = document.elementFromPoint(event.clientX, event.clientY)?.closest?.('.workThumb')
     if (thumb?.dataset.workIndex) {
+      event.preventDefault()
+      dragStateRef.current.suppressClickUntil = performance.now() + 360
       setActiveWork(Number(thumb.dataset.workIndex))
     }
   }
@@ -984,7 +989,7 @@ function App() {
             <i />
             <span className={lang === 'en' ? 'isActive' : ''}>EN</span>
           </button>
-          <a className="navContact" href={assetPath('resume-youkai.pdf')} target="_blank" rel="noreferrer">{copy.contact}</a>
+          <a className="navContact" href={assetPath('youkai-cv.pdf')} target="_blank" rel="noreferrer">{copy.contact}</a>
         </div>
       </header>
 
