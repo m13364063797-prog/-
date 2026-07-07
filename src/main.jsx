@@ -281,7 +281,6 @@ function WorkMedia({ work, alt, preview = false }) {
 
   function playPreview() {
     if (!preview || !videoRef.current) return
-    videoRef.current.play().catch(() => {})
   }
 
   function pausePreview() {
